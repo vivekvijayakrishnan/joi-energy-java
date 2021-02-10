@@ -52,6 +52,7 @@ public class SeedingApplicationDataConfiguration {
         smartMeterToPricePlanAccounts.put("smart-meter-2", MOST_EVIL_PRICE_PLAN_ID);
         smartMeterToPricePlanAccounts.put("smart-meter-3", STANDARD_PRICE_PLAN_ID);
         smartMeterToPricePlanAccounts.put("smart-meter-4", RENEWABLES_PRICE_PLAN_ID);
+        smartMeterToPricePlanAccounts.put("smart-meter-5", null);
         return smartMeterToPricePlanAccounts;
     }
 

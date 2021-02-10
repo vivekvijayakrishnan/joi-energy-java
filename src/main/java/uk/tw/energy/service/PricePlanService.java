@@ -7,10 +7,7 @@ import uk.tw.energy.domain.PricePlan;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +30,12 @@ public class PricePlanService {
 
         return Optional.of(pricePlans.stream().collect(
                 Collectors.toMap(PricePlan::getPlanName, t -> calculateCost(electricityReadings.get(), t))));
+    }
+
+    public Optional<Map<String, BigDecimal>> getCostForElectricityReading(PricePlan pricePlan, Optional<List<ElectricityReading>> electricityReadings) {
+        Map<String, BigDecimal> cost = new HashMap<>();
+        cost.put(pricePlan.getPlanName(),calculateCost(electricityReadings.get(),pricePlan));
+        return Optional.of(cost);
     }
 
     private BigDecimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan) {

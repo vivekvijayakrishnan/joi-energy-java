@@ -6,11 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import uk.tw.energy.builders.MeterReadingsBuilder;
 import uk.tw.energy.domain.MeterReadings;
 
@@ -61,7 +57,28 @@ public class EndpointTest {
 
         ResponseEntity<String> response =
                 restTemplate.getForEntity("/price-plans/recommend/" + smartMeterId + "?limit=2", String.class);
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void shouldCalculatePricesForLastWeek() throws JsonProcessingException {
+        String smartMeterId = "smart-meter-4";
+        populateMeterReadingsForMeter(smartMeterId);
+
+        ResponseEntity<String> response = restTemplate.getForEntity("/account/usage/" + smartMeterId, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void shouldNotCalculatePricesForLastWeek() throws JsonProcessingException {
+        String smartMeterId = "lastWeek";
+        populateMeterReadingsForMeter(smartMeterId);
+
+        ResponseEntity<String> response = restTemplate.getForEntity("/account/usage/" + smartMeterId, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     private HttpEntity<String> getStringHttpEntity(Object object) throws JsonProcessingException {
